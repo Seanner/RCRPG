@@ -101,8 +101,8 @@
 
 ;;legal move macros
 
-;depending on whether the adjacent room exists, do one of two things
-;string * state * (code => state) * (code => state) -> state
+;depending on whether the adjacent room exists and some other test, do one of two things
+;string * state * (code => ?) * (code => state) * (code => state) -> state
 (define-syntax-rule (aif-neighbor dir s i t e)
   (aand (neighbor dir s) (skip i)
         (if (room-at? @ (state-l s)) t e)))
@@ -123,14 +123,14 @@
 (define actions '())
 
 ;[string] * action -> effect: mutate action table
-(define-syntax-rule (add-action! (s ...) a)
-  (set! actions (cons (cons (s ...) a) actions)))
+(define (add-action! ss a)
+  (set! actions (cons (cons ss a) actions)))
 
 ;string -> maybe action
 (define (get-action s)
   (massoc s actions member))
 
-;string * rest ... -> state
+;string * rest ... -> maybe state
 (define (run-action s . args)
   (aand (get-action s)
         (skip (= (length args) (action-n-args @)))
