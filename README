@@ -1,20 +1,27 @@
 To do:
 --------------------------------------------------------------------------------
 
-Change take/drop so instead of usage like:
+About to make significant changes to the state functions.  They will be written
+in an appropriately declarative style.  The goal is to have the following
+possible rather than "(take/drop (lambda (p r) ...) (lambda (p r) ...))":
 
-(take/drop (lambda (p r) ...
-           (lambda (p r) ...
+(transfer gold p->r)
 
-It would be anaphoric:
+or
 
-(define-syntax-parameter @p ... ;player
-(define-syntax-parameter @r ... ;room
+(transfer (item ladder) r->p)
 
-(take/drop <code that can use @p and @r>
-           <code that can use @p and @r>
+by implementing transfer so that it knows zero-sum operations, i.e. gold uses
+"+" on player and "-" on room or vice versa, and item uses cons and remove or
+(const '()) and append.  In this way, transfer handles any potential data type,
+and new operations can be defined by giving the proper inverse operators and the
+direction of transfer.  The current style of spelling out how to move x gold
+by creating an entire new state by find the room and making a new room similar
+to the old room ... etc ... is embarrassingly C-like.
 
 --------------------------------------------------------------------------------
+
+When the above is done, the below might have less motivation:
 
 Implement some kind of functional update syntax for structures or make
 custom fancy structures if that's not possible or maybe just use classes,
