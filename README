@@ -1,0 +1,27 @@
+To do:
+--------------------------------------------------------------------------------
+
+Change take/drop so instead of usage like:
+
+(take/drop (lambda (p r) ...
+           (lambda (p r) ...
+
+It would be anaphoric:
+
+(define-syntax-parameter @p ... ;player
+(define-syntax-parameter @r ... ;room
+
+(take/drop <code that can use @p and @r>
+           <code that can use @p and @r>
+
+--------------------------------------------------------------------------------
+
+Implement some kind of functional update syntax for structures or make
+custom fancy structures if that's not possible or maybe just use classes,
+but the goal is to convert
+
+(state (state-p s) <new-coord-expression> (state-l s))
+
+to
+
+(set-state-c s <new-coord-expression>)
